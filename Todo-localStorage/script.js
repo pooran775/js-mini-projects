@@ -20,7 +20,6 @@ document.addEventListener("DOMContentLoaded", () => {
     saveTasks();
     renderTask(newTask);
     todoInput.value = ""; //clear input
-    console.log(tasks);
   });
 
   function renderTask(task) {
@@ -40,7 +39,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     li.querySelector("button").addEventListener("click", (e) => {
       e.stopPropagation(); //prevent toggle from firing
-      tasks = tasks.filter((t) => t.id === task.id);
+      tasks = tasks.filter((t) => t.id !== task.id);
       li.remove();
       saveTasks();
     });
