@@ -5,7 +5,11 @@ document.addEventListener("DOMContentLoaded", () => {
     { id: 3, name: "Product 3", price: 59.999 },
   ];
 
-  const cart = [];
+  let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+  function saveCart() {
+    localStorage.setItem("cart", JSON.stringify(cart));
+  }
 
   const productList = document.getElementById("product-list");
   const cartItems = document.getElementById("cart-items");
@@ -47,8 +51,10 @@ document.addEventListener("DOMContentLoaded", () => {
       cart.forEach((item, index) => {
         totalPrice += item.price;
         const cartItem = document.createElement("div");
+        cartItem.classList.add("cart-item");
         cartItem.innerHTML = `
-        ${item.name} - $${item.price.toFixed(2)}
+        <span>${item.name} - $${item.price.toFixed(2)}</span>
+        <button item-id="${item.id}">Remove</button>
         `;
         cartItems.appendChild(cartItem);
         totalPriceDisplay.textContent = `${totalPrice.toFixed(2)}`;
