@@ -11,7 +11,14 @@ document.addEventListener("DOMContentLoaded", () => {
   //Get the API key from the open weather map
   const API_KEY = "5f56d525d1619d0a2cd2eac4ce55588e"; //env variables
 
-  getWeatherBtn.addEventListener("click", async () => {
+  getWeatherBtn.addEventListener("click", fetchWeatherData);
+  cityInput.addEventListener("keydown", (event) => {
+    if (event.key === "Enter") {
+      fetchWeatherData();
+    }
+  });
+
+  async function fetchWeatherData() {
     const city = cityInput.value.trim();
     if (!city) return;
 
@@ -19,24 +26,19 @@ document.addEventListener("DOMContentLoaded", () => {
     // server/database is always in another continent
 
     try {
-      const weatherData = await fetchWeatherData(city);
+      //gets the data
+      const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${API_KEY}`;
+
+      const response = await fetch(url);
+
+      if (!response.ok) {
+        throw new Error(" City Not found");
+      }
+      const weatherData = await response.json();
       displayWeatherData(weatherData);
     } catch (error) {
       showError();
     }
-  });
-
-  async function fetchWeatherData(city) {
-    //gets the data
-    const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${API_KEY}`;
-
-    const response = await fetch(url);
-
-    if (!response.ok) {
-      throw new Error(" City Not found");
-    }
-    const data = await response.json();
-    return data;
   }
 
   function displayWeatherData(data) {
